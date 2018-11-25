@@ -112,5 +112,148 @@ def fib(n):
         return fib(n-1) + fib(n-2)
     
 #how does this function work?
-        # well, the base case is n=0 or n=1 
-        so lets say we want th 
+        # well, the base case is n=0 or n=1
+        # adds together numbers one and two less than number entered
+        
+ #using dynamic programming, we create an empty dictionary to store values previously generated       
+def fastFib(n, memo = {}):
+    if n ==0 or n ==1:
+        return 1
+    try:
+        return memo[n]
+    except KeyError: # KeyError is error when key doesn't exist within a dictionary
+        result =  fib(n-1, memo) + fib(n-2, memo)
+        memo[n] = result
+    return result
+        
+
+#Graph Theory
+    #general node class
+
+class Node(object):
+    def __init__(self, name):
+        """Assumes name is a string """
+        self.name = name
+    def getName(self):
+        return self.name
+    def __str__(self):
+        return self.name
+    
+class Edge(object):
+    def __init__(self, src, dest):
+        self.src = src
+        self.dest = dest
+    def getSource(self):
+        return self.src
+    def getDestination(self):
+        return self.dest
+    def __str_(self):
+        return self.src.getName() + '->'\
+            + self.dest.getName()
+   
+#common representations of graphs
+        # adjacency matrix - rows, source nodes. columns, destination nodes
+            # Cells[s, d] = 1 if there is an edge from s to d #0 otherwise
+        #adjacency list- associate with each node a list of destination nodes. 
+class Digraph(object):
+    """edges is a dict mapping each node to a list of its children"""
+    def __init__(self):
+        self.edges = {}
+    
+    def addNode(self, node): # a lot of error checking code in this class - that's a good thing!
+        if node in self.edges:
+            raise ValueError('Duplicate node')
+        else:
+            self.edges[node] = []
+        
+    def addEdge(self, edge):
+        src = edge.getSource()
+        dest = edge.getDestination()
+        if not (src in self.edges and dst in self.edges):
+            raise ValueError('Node not in graph')
+        self.edges[src].append(dest)
+
+    def childrenOf(self, node):
+        return self.edges[node]
+    
+    def hasNode(self, node):
+        return node in self.edges
+    
+    def getNode(self, name):
+        for n in self.edges:
+            if n.getName() == name:
+                return n
+        raise NameError(name)
+        
+    def __str__(self):
+        result = ''
+        for src in self.edges:
+            for dest in self.edges[src]:
+                result = restult + src.getName() + '->'\
+                         + dest.getName() + '\n'
+        return result[:-1] # omit final new line
+
+class Graph(Digraph):
+    def addEdge(self, edge):
+        Digraph.addEgde(self, edge)
+        rev = Edge(edge.getDestination(), edge.getSource())
+        Digraph.addEdge(self,rev)
+#substitution rule
+#sub and super class relationships - 
+        # if client code works correctly using an instance of the supertype, 
+        # it should also work correctly when an instance of the subtype is substituted for the instance of the supertype
+        # in the case of graph and digraph, any progam that works with a digraph will also work with a graph, but
+        #but not any program that works with a graph will work with a digraph
+        #thus, digraph must be teh supertype and graph is the subtype - seems counterintuitive
+
+
+
+#Depth frirst search (DFS) 
+        #chooses one child of a node, then the child afer that, until it reaches a deep child node
+        #we keep track of the nodes visit to avoid getting caught in a cycle.
+        
+def DFS(graph, start, end, path, shortest):
+    path = path+[start] #path is initialized to be orig path + start path
+    if start == end: # if there is only one node, the path is just that node. 
+        return path 
+    for node in graph.childrenOf(start): #graph is value to be made into graph, childrenOf prints all edges stored as values to the start node 
+        if node not in path: #avoid cycles, if we've already gone thru a node, we don't go again
+            if shortest == None or len(path) < len(shortest):
+                newPath = DFS(graph, node, end, path, shortest, toPrint) #continues making paths of different lengths, temporaly storing as newpath, then 
+                if newPath != None:
+                    shortest = newPath
+    return shortest
+#wrapper function - provides appropriate level of abstraction
+def shortestPath(graph, start, end):
+    return DFS(graph, start, end, [], None)
+
+#Breadth first search
+def BFS(graph, start, end, torPrint = False):
+    initPath = [start]
+    pathQueue = [initPath]
+    if toPrit:
+        print('Current BFS path:', printPath(pathQueue))
+    while len(pathQueue) != 0:
+        #Get and remove oldest element in pathQueue
+        tmpPath - pathQueue.pop(0)
+        print('Current BFS path:', printPath(tmpPath))
+        lastNode = tmpPath[-1]
+        if lastNost == end:
+            return tmpPath
+        for nextNode in graph.childrenOf(lastNode):
+            if nextNode not in tmpPath:
+                newPath - tmpPath + [nextNode]
+                pathQueue.append(newPath)
+    return None
+
+
+                
+# I don't think i really understand error throwing and custom exceptions, so I should practice a bit
+class testErrorThrow(object):
+    def __init__(self):
+        self.
+        
+        try:
+            x + y 
+        except: 
+            

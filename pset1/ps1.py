@@ -54,23 +54,28 @@ def greedy_cow_transport(cows,limit=10):
     transported on a particular trip and the overall list containing all the
     trips
     """
-    #initialize necessary variables
-    import operator
-    cowsCopy = sorted(cows.items(), key=operator.itemgetter(1))
-    if cowsCopy[1][1] > limit:
-        cowTrips += greedy_cow_transport(cowsCopy[1:], limit)
-    else:
-        greedy_cow_transport(cowsCopy[1:], limit - cowsCopy[1][1])
-    for i in range(len(cowsCopy)):
-        trip=[]
-        totalWeight = 0
-        if totalWeight+cowsCopy[i][1] <= limit:
-            trip+=cowsCopy[i]
-            totalWeight+=cowsCopy[i][1]
-            cowTrips+=trip
+    allTrips = []
+    cowsCopy = cows.copy()
+    cowsSorted = sorted(cowsCopy.items(), key=lambda x: x[1], reverse = True)
+    while sum(cowsCopy.values()) > 0:
+        ship = []
+        total = 0
+        for cow, value in cowsSorted:
+            if cowsCopy[cow] != 0 and value + total <= limit:
+                ship.append(cow)
+                total += value
+                cowsCopy[cow] = 0
+        allTrips.append(ship)
+    return allTrips
+#                
+
+            
+            #elif # cow is too heavy
+            # keep in list
+            
+
 
 # as is now, this code prints only one possible combination with betsy and only betsy.
-# need the code to continue through all possible combinations
 
 
 # Problem 2
@@ -94,8 +99,30 @@ def brute_force_cow_transport(cows,limit=10):
     transported on a particular trip and the overall list containing all the
     trips
     """
-    # TODO: Your code here
-    pass
+    # creates all options using get partitions, labels each "train"
+    # checks if sum of all values in the car within the train are less than the total
+    # sets the key as the len for determining the minimum
+    return min([train for train in get_partitions(cows)
+                if all(sum(cows[c] for c in car) <= limit for car in train)
+             ], key = len)
+    
+    
+#    cowsCopy = cows.copy()
+#    alltotals=[]
+#    print(cowsCopy)
+#    for combination in get_partitions(cowsCopy):
+#        for trip in combination:
+#            triptotal = 0
+#            for cow in trip:
+#                triptotal += cowsCopy[cow]
+#            alltotals.append(triptotal) #alltotals now contains all weights of cows in one 
+#        for number in alltotals:
+#            if number >= limit:
+#                pass
+#            else:
+#                return combination
+#            
+            
 
         
 # Problem 3
@@ -126,7 +153,7 @@ cows = load_cows("ps1_cow_data.txt")
 limit=10
 #print(cows)
 
-print(greedy_cow_transport(cows, limit))
+#print(greedy_cow_transport(cows, limit))
 print(brute_force_cow_transport(cows, limit))
 
 
